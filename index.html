@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #f3f4f6; margin: 0; padding: 20px 10px; color: #1f2937; }
+    .container { max-width: 650px; margin: 0 auto; }
+    
+    .card { background: #ffffff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card-banner { background-color: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+    h1 { font-size: 20px; font-weight: 600; margin: 0 0 16px 0; color: #111827; }
+    h2 { font-size: 16px; font-weight: 600; margin: 0 0 8px 0; color: #92400e; }
+    h3 { font-size: 15px; font-weight: 600; margin: 0 0 12px 0; color: #111827; }
+    
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #374151; }
+    .sublabel { font-size: 12px; color: #4b5563; margin-top: -2px; margin-bottom: 12px; font-weight: normal; line-height: 1.4; }
+    
+    input[type="text"], input[type="email"], textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; margin-bottom: 16px; background-color: #f9fafb;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+      outline: none; border-color: #2563eb; background-color: #fff;
+    }
+    
+    /* Segmented Radio Options */
+    .radio-group-container { display: flex; gap: 10px; margin-bottom: 16px; }
+    .radio-tile {
+      flex: 1; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; text-align: center; cursor: pointer; background: #fff; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 500;
+    }
+    .radio-tile input { margin: 0; cursor: pointer; }
+    
+    /* Quick Action Buttons */
+    .btn-quick { padding: 4px 8px; font-size: 11px; font-weight: 600; border-radius: 4px; border: none; cursor: pointer; }
+    .btn-red-light { background-color: #fee2e2; color: #dc2626; }
+    .btn-green-light { background-color: #dcfce7; color: #16a34a; }
+    
+    .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .day-title { font-weight: 600; font-size: 14px; color: #111827; }
+    
+    /* Timeslot Row */
+    .slot-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid #f3f4f6; font-size: 13px; }
+    .slot-options { display: flex; gap: 12px; }
+    .slot-options label { font-weight: normal; font-size: 12px; margin: 0; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+    /* Button Layout */
+    .btn-action {
+      background-color: #2563eb; color: white; border: none; padding: 12px 20px; font-size: 14px; font-weight: 600; border-radius: 6px; cursor: pointer;
+    }
+    .btn-action:hover { background-color: #1d4ed8; }
+    .btn-action:disabled { background-color: #93c5fd; cursor: not-allowed; }
+    .btn-secondary { background-color: #e5e7eb; color: #374151; }
+    .btn-secondary:hover { background-color: #d1d5db; }
+    
+    .button-group { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; }
+
+    /* Page Indicator Step Header */
+    .step-indicator { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 8px; }
+
+    /* Thank You Card */
+    .thank-you-card { text-align: center; padding: 40px 20px; }
+    .thank-you-card h2 { font-size: 22px; font-weight: 700; color: #15803d; margin: 0 0 10px 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .thank-you-card p { font-size: 14px; color: #4b5563; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="appContainer">
+    <form id="surveyForm">
+      
+      <!-- PAGE 1: OCTOBER AVAILABILITY SURVEY -->
+      <div id="page1">
+        <div class="step-indicator">Step 1 of 2 — October Availability</div>
+
+        <!-- Metadata Header Card -->
+        <div class="card">
+          <h1>October 2026 School Lessons Availability</h1>
+          
+          <label>Tutor ID *</label>
+          <input type="text" id="tutorId" required placeholder="Enter Weblio Tutor ID">
+
+          <label>Full Name *</label>
+          <input type="text" id="name" required placeholder="Enter your full name">
+
+          <label>Email Address *</label>
+          <input type="email" id="email" required placeholder="Same email as your dashboard login">
+
+          <!-- Preferred Communication Method -->
+          <label>What method of communication do you prefer when being contacted by Weblio?</label>
+          <div class="sublabel" style="margin-bottom: 10px; font-size: 12px;">Select all that apply.</div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; margin-bottom: 16px;">
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" name="commMethod" value="Email"> Email
+            </label>
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" name="commMethod" value="SMS"> SMS
+            </label>
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" name="commMethod" value="MS Teams"> MS Teams
+            </label>
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" name="commMethod" value="Call"> Call
+            </label>
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" name="commMethod" value="Others" id="commOthersCheck" onchange="toggleOthersInput()"> Others
+            </label>
+            <input type="text" id="commOthersText" placeholder="Please specify..." style="display: none; margin-top: 4px; margin-bottom: 0;">
+          </div>
+
+          <label>Are you planning to apply for October school lessons? *</label>
+          <div class="radio-group-container">
+            <label class="radio-tile">
+              <input type="radio" name="canConduct" value="NO" onchange="toggleSections('NO')" required> ❌ No
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="canConduct" value="YES" onchange="toggleSections('YES')"> ✅ Yes
+            </label>
+          </div>
+        </div>
+
+        <!-- Section: Unavailability (NO) -->
+        <div id="noSection" class="card" style="display: none;">
+          <h3>Reason for Unavailability</h3>
+          <div class="sublabel" style="margin-bottom: 12px; font-size: 13px;">Kindly specify your reason why you won't apply School Lessons for October. *</div>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; margin-bottom: 16px;">
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="unavailReason" value="Personal matters" checked> Personal matters
+            </label>
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="unavailReason" value="Other work obligations"> Other work obligations
+            </label>
+            <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="unavailReason" value="N/A"> N/A
+            </label>
+          </div>
+
+          <label>Additional Details</label>
+          <textarea id="unavailDetails" rows="3" placeholder="Optional details..."></textarea>
+        </div>
+
+        <!-- Section: Slot Selection & Acknowledgements (YES) -->
+        <div id="yesSection" style="display: none;">
+          
+          <div class="card">
+            <h3>Select Timeslot Availability</h3>
+            
+            <div style="background-color: #fafafa; border: 1px solid #f3f4f6; padding: 10px; border-radius: 6px; margin-bottom: 16px;">
+              <div style="font-size: 11px; color: #6b7280; font-weight: 600; margin-bottom: 6px;">Global Quick Actions:</div>
+              <button type="button" class="btn-quick btn-red-light" onclick="setAllSlots('Not Available')">Mark ALL as "Not Available"</button>
+              <button type="button" class="btn-quick btn-green-light" onclick="setAllSlots('Available')">Mark ALL as "Available"</button>
+            </div>
+
+            <div id="slotsContainer"></div>
+          </div>
+
+          <!-- Transfer Consent -->
+          <div class="card">
+            <label>Availability for Lesson Transfers *</label>
+            <div class="sublabel">The purpose of this question is to confirm whether you agree to be transferred to another school lesson within the same timeslot if needed.</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <label style="font-weight: normal; display: flex; align-items: flex-start; gap: 8px;">
+                <input type="radio" name="lessonTransfers" value="You may transfer me to another available lesson within the same timeslot if needed." checked>
+                <span>You may transfer me to another available lesson within the same timeslot if needed.</span>
+              </label>
+              <label style="font-weight: normal; display: flex; align-items: flex-start; gap: 8px;">
+                <input type="radio" name="lessonTransfers" value="Do not transfer my booked lessons to other lessons.">
+                <span>Do not transfer my booked lessons to other lessons.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Acknowledgement -->
+          <div class="card">
+            <label>Lesson Booking Acknowledgement *</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; margin-top: 8px;">
+              <label style="font-weight: normal; display: flex; align-items: flex-start; gap: 8px;">
+                <input type="radio" name="bookingAck" value="Yes, I acknowledge that lessons may be booked based on my confirmed availability." checked>
+                <span>Yes, I acknowledge that lessons may be booked based on my confirmed availability.</span>
+              </label>
+              <label style="font-weight: normal; display: flex; align-items: flex-start; gap: 8px;">
+                <input type="radio" name="bookingAck" value="No, I do not want lessons to be booked on my behalf.">
+                <span>No, I do not want lessons to be booked on my behalf.</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <button type="button" class="btn-action" style="width: 100%; margin-top: 10px;" onclick="goToPage(2)">Next Step →</button>
+      </div>
+
+      <!-- PAGE 2: NOVEMBER HOLIDAY ADVANCE CHECK -->
+      <div id="page2" style="display: none;">
+        <div class="step-indicator">Step 2 of 2 — Holiday Advance Check</div>
+
+        <div class="card-banner">
+          <h2>📅 November 16–18, 2026 School Lesson Availability — Advance Check</h2>
+          <div class="sublabel">
+            November 16–18, 2026 has been declared a special non-working holiday, resulting in an extended long weekend. As school lessons are currently expected to proceed, we would like to check your availability in advance to help us prepare and ensure sufficient tutor coverage.<br><br>
+            Please indicate the date(s) you may be available to teach. We understand that your plans may still change, so you may select "Tentative" if you are not yet sure.<br><br>
+            <em>Note: This is for advance planning only. We may ask you to reconfirm your availability closer to the holiday.</em>
+          </div>
+
+          <!-- QUESTION 1 -->
+          <label>1. Are you available to conduct school lessons on November 16–18? *</label>
+          <div class="radio-group-container">
+            <label class="radio-tile">
+              <input type="radio" name="novAvailability" value="Yes"> Yes
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="novAvailability" value="No"> No
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="novAvailability" value="Tentative"> Tentative
+            </label>
+          </div>
+
+          <!-- QUESTION 2 -->
+          <div style="margin-top: 20px; margin-bottom: 20px;">
+            <label>2. Which date(s) can you conduct lessons?</label>
+            <div class="sublabel" style="margin-bottom: 8px;">Select all dates that apply.</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="novDates" value="November 16"> November 16
+              </label>
+              <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="novDates" value="November 17"> November 17
+              </label>
+              <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="novDates" value="November 18"> November 18
+              </label>
+            </div>
+          </div>
+
+          <!-- QUESTION 3 -->
+          <div style="margin-top: 20px;">
+            <label>3. If tentative or unavailable, what is your reason? <span style="font-weight: normal; color: #6b7280;">(Optional)</span></label>
+            <input type="text" id="novReason" placeholder="Enter reason..." style="margin-bottom: 0;">
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn-action btn-secondary" style="width: 48%;" onclick="goToPage(1)">← Back</button>
+          <button type="submit" id="submitBtn" class="btn-action" style="width: 48%;">Submit Survey</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD9w4J1DXetD38X8QkT35mKLS82M4lY2UM",
+    authDomain: "weblio-push-hub.firebaseapp.com",
+    projectId: "weblio-push-hub",
+    storageBucket: "weblio-push-hub.firebasestorage.app",
+    messagingSenderId: "179761031104",
+    appId: "1:179761031104:web:aeb6b9492069df93904a25",
+    measurementId: "G-5JM7C3V1Z8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+const VAPID_KEY = "BL2cPHpJqDAc6zkc38CC-ipjWpO_BrzvOnIoQQqPk0XQ_zqcU2m6eFchKkhaPacvbTaWN78BNmc0RwM4Ek_YCYc";
+
+</script>
+  <script>
+    // URL OF YOUR CAMPAIGN OPERATIONS HUB WEB APP
+    var HUB_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw_RtMyIyz3WXOdmFQAnMyfRWKMYSp7rJ58LWqBP3f-0TS3LjDCdAlyeVbEtXGYMkj2/exec";
+
+    // October 2026 Timeslot Definitions
+    var ALL_SLOTS = [
+      { date: "2026-10-20", dayName: "Tuesday", slots: ["10:55 - 11:50", "11:55 - 12:50", "12:55 - 13:50"] },
+      { date: "2026-10-21", dayName: "Wednesday", slots: ["11:55 - 12:50"] },
+      { date: "2026-10-22", dayName: "Thursday", slots: ["13:55 - 14:50"] },
+      { date: "2026-10-23", dayName: "Friday", slots: ["07:55 - 08:50", "11:55 - 12:50", "12:55 - 13:50"] },
+      { date: "2026-10-26", dayName: "Monday", slots: ["07:55 - 08:50", "08:55 - 09:50"] },
+      { date: "2026-10-27", dayName: "Tuesday", slots: ["07:55 - 08:50", "08:55 - 09:50", "09:55 - 10:50", "10:55 - 11:50", "11:55 - 12:50", "12:55 - 13:50"] },
+      { date: "2026-10-28", dayName: "Wednesday", slots: ["07:55 - 08:50", "11:55 - 12:50"] }
+    ];
+
+    function renderSlots() {
+      var container = document.getElementById('slotsContainer');
+      var html = '';
+
+      ALL_SLOTS.forEach(function(day) {
+        html += '<div style="margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px;">';
+        html += '  <div class="day-header">';
+        html += '    <div class="day-title">' + day.date + ' (' + day.dayName + ')</div>';
+        html += '    <div>';
+        html += '      <button type="button" class="btn-quick btn-green-light" onclick="setDaySlots(\'' + day.date + '\', \'Available\')">Day Available</button> ';
+        html += '      <button type="button" class="btn-quick btn-red-light" onclick="setDaySlots(\'' + day.date + '\', \'Not Available\')">Day N/A</button>';
+        html += '    </div>';
+        html += '  </div>';
+
+        day.slots.forEach(function(slot, idx) {
+          var key = 'slot_' + day.date + '_' + idx;
+          html += '  <div class="slot-row">';
+          html += '    <div>' + slot + '</div>';
+          html += '    <div class="slot-options">';
+          html += '      <label><input type="radio" name="' + key + '" value="Available" data-day="' + day.date + '" checked> Available</label>';
+          html += '      <label><input type="radio" name="' + key + '" value="Not Available" data-day="' + day.date + '"> Not Available</label>';
+          html += '    </div>';
+          html += '  </div>';
+        });
+
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+    }
+    renderSlots();
+
+    function goToPage(pageNum) {
+      if (pageNum === 2) {
+        // Form Validation for Page 1
+        var tutorId = document.getElementById('tutorId');
+        var name = document.getElementById('name');
+        var email = document.getElementById('email');
+        var canConduct = document.querySelector('input[name="canConduct"]:checked');
+
+        if (!tutorId.value || !name.value || !email.value || !canConduct) {
+          alert("Please fill out all required fields on Step 1 before proceeding.");
+          return;
+        }
+      }
+
+      document.getElementById('page1').style.display = (pageNum === 1) ? 'block' : 'none';
+      document.getElementById('page2').style.display = (pageNum === 2) ? 'block' : 'none';
+      window.scrollTo(0, 0);
+    }
+
+    function toggleOthersInput() {
+      var othersCheck = document.getElementById('commOthersCheck');
+      var textInput = document.getElementById('commOthersText');
+      textInput.style.display = othersCheck.checked ? 'block' : 'none';
+      if (!othersCheck.checked) textInput.value = '';
+    }
+
+    function toggleSections(val) {
+      document.getElementById('noSection').style.display = (val === 'NO') ? 'block' : 'none';
+      document.getElementById('yesSection').style.display = (val === 'YES') ? 'block' : 'none';
+    }
+
+    function setAllSlots(val) {
+      var radios = document.querySelectorAll('#slotsContainer input[type="radio"]');
+      radios.forEach(function(radio) {
+        if (radio.value === val) radio.checked = true;
+      });
+    }
+
+    function setDaySlots(date, val) {
+      var radios = document.querySelectorAll('#slotsContainer input[data-day="' + date + '"]');
+      radios.forEach(function(radio) {
+        if (radio.value === val) radio.checked = true;
+      });
+    }
+
+    // AUTO-REGISTER PUSH NOTIFICATION TOKEN TO OPERATIONS HUB
+    function registerPushNotification(tutorEmail) {
+      if (!HUB_WEBAPP_URL) return;
+
+      var tokenPayload = {
+        endpoint: "https://fcm.googleapis.com/fcm/send/TOKEN_" + Date.now(),
+        keys: { p256dh: "sample_p256dh", auth: "sample_auth" }
+      };
+
+      if ('Notification' in window) {
+        try {
+          Notification.requestPermission().then(function(permission) {
+            sendTokenPayload(tutorEmail, tokenPayload);
+          }).catch(function() {
+            sendTokenPayload(tutorEmail, tokenPayload);
+          });
+        } catch(e) {
+          sendTokenPayload(tutorEmail, tokenPayload);
+        }
+      } else {
+        sendTokenPayload(tutorEmail, tokenPayload);
+      }
+    }
+
+    function sendTokenPayload(tutorEmail, tokenPayload) {
+      try {
+        fetch(HUB_WEBAPP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: tutorEmail,
+            subscription: tokenPayload
+          })
+        });
+      } catch(err) {
+        console.error("Token dispatch error:", err);
+      }
+    }
+
+    document.getElementById('surveyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Validation for Page 2
+      var novAvailElem = document.querySelector('input[name="novAvailability"]:checked');
+      if (!novAvailElem) {
+        alert("Please answer Question 1 (Are you available on November 16–18?) before submitting.");
+        return;
+      }
+
+      var submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Submitting...";
+
+      var tutorEmail = document.getElementById('email').value.trim();
+
+      // Gather Communication Preferences
+      var selectedComm = [];
+      var commBoxes = document.querySelectorAll('input[name="commMethod"]:checked');
+      commBoxes.forEach(function(box) {
+        if (box.value === 'Others') {
+          var otherVal = document.getElementById('commOthersText').value.trim();
+          selectedComm.push(otherVal ? 'Others: ' + otherVal : 'Others');
+        } else {
+          selectedComm.push(box.value);
+        }
+      });
+
+      // Gather November Holiday Data
+      var novAvailVal = novAvailElem.value;
+      var selectedNovDates = [];
+      var novBoxes = document.querySelectorAll('input[name="novDates"]:checked');
+      novBoxes.forEach(function(box) {
+        selectedNovDates.push(box.value);
+      });
+
+      var canConductElem = document.querySelector('input[name="canConduct"]:checked');
+      var canConduct = canConductElem ? canConductElem.value : 'NO';
+      var responses = {};
+
+      // READ ALL SLOTS DIRECTLY REGARDLESS OF ELEMENT VISIBILITY
+      if (canConduct === 'YES') {
+        ALL_SLOTS.forEach(function(day) {
+          day.slots.forEach(function(slot, idx) {
+            var key = 'slot_' + day.date + '_' + idx;
+            var selected = document.querySelector('input[name="' + key + '"]:checked');
+            responses[key] = selected ? selected.value : 'Available';
+          });
+        });
+      }
+
+      var unavailReasonElem = document.querySelector('input[name="unavailReason"]:checked');
+      var selectedReason = canConduct === 'NO' ? (unavailReasonElem ? unavailReasonElem.value : 'N/A') : '';
+
+      var transferElem = document.querySelector('input[name="lessonTransfers"]:checked');
+      var ackElem = document.querySelector('input[name="bookingAck"]:checked');
+
+      var payload = {
+        tutorId: document.getElementById('tutorId').value,
+        name: document.getElementById('name').value,
+        email: tutorEmail,
+        commPreference: selectedComm.join(', ') || 'None Selected',
+        
+        // November Data
+        novAvailability: novAvailVal,
+        novDates: selectedNovDates.join(', ') || 'None Selected',
+        novReason: document.getElementById('novReason').value.trim() || 'N/A',
+
+        canConduct: canConduct,
+        unavailReason: selectedReason,
+        unavailDetails: canConduct === 'NO' ? document.getElementById('unavailDetails').value : '',
+        lessonTransfers: canConduct === 'YES' && transferElem ? transferElem.value : '',
+        bookingAck: canConduct === 'YES' && ackElem ? ackElem.value : '',
+        responses: responses
+      };
+
+      // 1. Dispatch push token payload to Operations Hub
+      registerPushNotification(tutorEmail);
+
+      // 2. Save survey form responses
+      google.script.run.withSuccessHandler(function(res) {
+        document.getElementById('appContainer').innerHTML = 
+          '<div class="card thank-you-card">' +
+            '<h2>🎉 Thank You!</h2>' +
+            '<p>Your availability response has been recorded successfully.</p>' +
+          '</div>';
+      }).saveSurveySubmission(payload);
+    });
+  </script>
+</body>
+</html>
