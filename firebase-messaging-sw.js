@@ -20,12 +20,25 @@ messaging.onBackgroundMessage(function(payload) {
     payload.notification?.title || "Weblio Philippines";
 
   const notificationOptions = {
-    body: payload.notification?.body || "",
+    body: payload.notification?.body || "You have a new notification.",
     icon: "/weblio-push-service-worker/icon.png"
   };
 
   self.registration.showNotification(
     notificationTitle,
     notificationOptions
+  );
+});
+
+self.addEventListener("install", function() {
+  console.log("Weblio notification service worker installed.");
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", function(event) {
+  console.log("Weblio notification service worker activated.");
+
+  event.waitUntil(
+    self.clients.claim()
   );
 });
