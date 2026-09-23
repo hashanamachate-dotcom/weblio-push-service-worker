@@ -2,13 +2,13 @@ importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js
 importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js");
 
 firebase.initializeApp({
-  apiKey: "AIzaSyD9w4J1DXetD38XQkT35mKLS82M4lY2UM",
-  authDomain: "weblio-push-hub.firebaseapp.com",
-  projectId: "weblio-push-hub",
-  storageBucket: "weblio-push-hub.firebasestorage.app",
-  messagingSenderId: "179761031104",
-  appId: "1:179761031104:web:aeb6b9492069df93904a25",
-  measurementId: "G-5JM7C3V1Z8"
+  apiKey: "AIzaSyDHa8Asn_C2YbNEpLdzQur5abUA_L5cI74",
+  authDomain: "weblio-push-hub-64689.firebaseapp.com",
+  projectId: "weblio-push-hub-64689",
+  storageBucket: "weblio-push-hub-64689.firebasestorage.app",
+  messagingSenderId: "240629203108",
+  appId: "1:240629203108:web:38e2e2d1f9884cefef2631",
+  measurementId: "G-ME77G36Z4S"
 });
 
 const messaging = firebase.messaging();
@@ -20,7 +20,7 @@ messaging.onBackgroundMessage(function(payload) {
     payload.notification?.title || "Weblio Philippines";
 
   const notificationOptions = {
-    body: payload.notification?.body || "You have a new notification.",
+    body: payload.notification?.body || "You have a new Weblio notification.",
     icon: "/weblio-push-service-worker/icon.png"
   };
 
