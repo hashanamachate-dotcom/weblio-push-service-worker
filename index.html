@@ -149,42 +149,23 @@
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging.js";
 
 
-  // NEW FIREBASE PROJECT
-
   const firebaseConfig = {
-
     apiKey: "AIzaSyDHa8Asn_C2YbNEpLdzQur5abUA_L5cI74",
-
     authDomain: "weblio-push-hub-64689.firebaseapp.com",
-
     projectId: "weblio-push-hub-64689",
-
     storageBucket: "weblio-push-hub-64689.firebasestorage.app",
-
     messagingSenderId: "240629203108",
-
     appId: "1:240629203108:web:38e2e2d1f9884cefef2631",
-
     measurementId: "G-ME77G36Z4S"
-
   };
 
-
-  // NEW VAPID KEY
 
   const VAPID_KEY =
     "BG9DxwA_SjkCNwr2qA46gMq6QfeaFuKp3aX9PSindEqEAG-KbzqsKvmqWx3sBm8mlWoyHZs-Z5b1NU5uU49_dnQ";
 
 
-  // APPS SCRIPT REGISTRY
-
   const REGISTRY_URL =
     "https://script.google.com/macros/s/AKfycbzdgH_gwN_j6h2-xUIB5oECq1wCctEHLRm5HKxW55cHkFaNhTHXSppkj0lcZCVzt3S5/exec";
-
-
-  const app = initializeApp(firebaseConfig);
-
-  const messaging = getMessaging(app);
 
 
   const form =
@@ -201,185 +182,247 @@
 
     status.textContent = message;
 
-    status.className =
-      "status " + type;
+    status.className = "status " + type;
 
     status.style.display = "block";
 
   }
 
 
-  form.addEventListener("submit", async function(event) {
+  /*
+   * Register the Firebase service worker BEFORE
+   * initializing Firebase Messaging.
+   */
 
-    event.preventDefault();
-
-
-    const tutorId =
-      document.getElementById("tutorId")
-        .value
-        .trim();
+  let serviceWorkerRegistration;
 
 
-    const email =
-      document.getElementById("email")
-        .value
-        .trim();
+  async function registerServiceWorker() {
 
+    if (!("serviceWorker" in navigator)) {
 
-    if (!tutorId || !email) {
-
-      showStatus(
-        "Please enter your Tutor ID and email address.",
-        "error"
+      throw new Error(
+        "This browser does not support service workers."
       );
-
-      return;
 
     }
 
 
-    button.disabled = true;
-
-    button.textContent =
-      "Enabling Notifications...";
+    const serviceWorkerUrl =
+      "/weblio-push-service-worker/firebase-messaging-sw.js";
 
 
-    try {
+    serviceWorkerRegistration =
+      await navigator.serviceWorker.register(
+        serviceWorkerUrl,
+        {
+          scope: "/weblio-push-service-worker/"
+        }
+      );
 
-      if (!("Notification" in window)) {
 
-        throw new Error(
-          "This browser does not support web notifications."
+    console.log(
+      "Service worker registered:",
+      serviceWorkerRegistration
+    );
+
+
+    await navigator.serviceWorker.ready;
+
+
+    console.log(
+      "Service worker is ready:",
+      navigator.serviceWorker.controller
+    );
+
+
+    return serviceWorkerRegistration;
+
+  }
+
+
+  form.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      const tutorId =
+        document.getElementById("tutorId")
+          .value
+          .trim();
+
+
+      const email =
+        document.getElementById("email")
+          .value
+          .trim();
+
+
+      if (!tutorId || !email) {
+
+        showStatus(
+          "Please enter your Tutor ID and email address.",
+          "error"
         );
+
+        return;
 
       }
 
 
-      showStatus(
-        "Requesting notification permission...",
-        "info"
-      );
-
-
-      const permission =
-        await Notification.requestPermission();
-
-
-      if (permission !== "granted") {
-
-        throw new Error(
-          "Notification permission was not granted."
-        );
-
-      }
-
-
-      showStatus(
-        "Permission granted. Registering this browser...",
-        "info"
-      );
-
-
-      const registration =
-        await navigator.serviceWorker.register(
-          "/weblio-push-service-worker/firebase-messaging-sw.js"
-        );
-
-
-      await navigator.serviceWorker.ready;
-
-
-      showStatus(
-        "Service worker ready. Creating notification registration...",
-        "info"
-      );
-
-
-      const token =
-        await getToken(messaging, {
-
-          vapidKey: VAPID_KEY,
-
-          serviceWorkerRegistration:
-            registration
-
-        });
-
-
-      if (!token) {
-
-        throw new Error(
-          "Firebase did not return a notification token."
-        );
-
-      }
-
-
-      showStatus(
-        "Notification registration created. Saving...",
-        "info"
-      );
-
-
-      await fetch(REGISTRY_URL, {
-
-        method: "POST",
-
-        mode: "no-cors",
-
-        headers: {
-
-          "Content-Type": "text/plain"
-
-        },
-
-        body: JSON.stringify({
-
-          tutorId: tutorId,
-
-          email: email,
-
-          token: token,
-
-          permission: permission
-
-        })
-
-      });
-
-
-      showStatus(
-        "✅ Notifications have been enabled successfully!",
-        "success"
-      );
-
+      button.disabled = true;
 
       button.textContent =
-        "Notifications Enabled";
+        "Enabling Notifications...";
 
 
-    } catch (error) {
+      try {
 
-      console.error(
-        "Notification registration error:",
-        error
-      );
+        if (!("Notification" in window)) {
 
+          throw new Error(
+            "This browser does not support web notifications."
+          );
 
-      showStatus(
-        "❌ " + error.message,
-        "error"
-      );
+        }
 
 
-      button.disabled = false;
+        showStatus(
+          "Preparing notification service...",
+          "info"
+        );
 
-      button.textContent =
-        "Enable Notifications";
+
+        /*
+         * Register service worker FIRST.
+         */
+
+        const registration =
+          await registerServiceWorker();
+
+
+        showStatus(
+          "Requesting notification permission...",
+          "info"
+        );
+
+
+        const permission =
+          await Notification.requestPermission();
+
+
+        if (permission !== "granted") {
+
+          throw new Error(
+            "Notification permission was not granted."
+          );
+
+        }
+
+
+        showStatus(
+          "Permission granted. Creating notification registration...",
+          "info"
+        );
+
+
+        /*
+         * Initialize Firebase only after the
+         * service worker is registered.
+         */
+
+        const app =
+          initializeApp(firebaseConfig);
+
+
+        const messaging =
+          getMessaging(app);
+
+
+        const token =
+          await getToken(
+            messaging,
+            {
+              vapidKey: VAPID_KEY,
+              serviceWorkerRegistration: registration
+            }
+          );
+
+
+        if (!token) {
+
+          throw new Error(
+            "Firebase did not return a notification token."
+          );
+
+        }
+
+
+        console.log(
+          "FCM token created:",
+          token
+        );
+
+
+        showStatus(
+          "Notification registration created. Saving...",
+          "info"
+        );
+
+
+        await fetch(
+          REGISTRY_URL,
+          {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "text/plain"
+            },
+            body: JSON.stringify({
+              tutorId: tutorId,
+              email: email,
+              token: token,
+              permission: permission
+            })
+          }
+        );
+
+
+        showStatus(
+          "✅ Notifications have been enabled successfully!",
+          "success"
+        );
+
+
+        button.textContent =
+          "Notifications Enabled";
+
+
+      } catch (error) {
+
+        console.error(
+          "Notification registration error:",
+          error
+        );
+
+
+        showStatus(
+          "❌ " + error.message,
+          "error"
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+          "Enable Notifications";
+
+      }
 
     }
-
-  });
+  );
 
 </script>
 
