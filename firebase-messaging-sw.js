@@ -10,7 +10,7 @@ importScripts(
 firebase.initializeApp({
 
   apiKey:
-    "AIzaSyDHa8Asn_C2YbNEpLdzQur5abUA_L5cI74",
+    "AIzaSyD5XhPV7yGhrCPUiYj3TSWuHF8OVWVAcXk",
 
   authDomain:
     "weblio-push-hub-64689.firebaseapp.com",
