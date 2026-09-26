@@ -158,6 +158,12 @@
 
 <script type="module">
 
+  /*
+   * ==========================================
+   * FIREBASE IMPORTS
+   * ==========================================
+   */
+
   import {
     initializeApp
   } from
@@ -170,87 +176,131 @@
     "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging.js";
 
 
-  // ============================================================
-  // FIREBASE CONFIG
-  // ============================================================
+  /*
+   * ==========================================
+   * FIREBASE CONFIGURATION
+   * ==========================================
+   *
+   * This is the NEW API key that successfully
+   * generated an FCM token from Vercel.
+   */
 
   const firebaseConfig = {
-    apiKey: "AIzaSyD5XhPV7yGhrCPUiYj3TSWuHF8OVWVAcXk",
+
+    apiKey:
+      "AIzaSyD5XhPV7yGhrCPUiYj3TSWuHF8OVWVAcXk",
+
     authDomain:
       "weblio-push-hub-64689.firebaseapp.com",
+
     projectId:
       "weblio-push-hub-64689",
+
     storageBucket:
       "weblio-push-hub-64689.firebasestorage.app",
+
     messagingSenderId:
       "240629203108",
+
     appId:
       "1:240629203108:web:38e2e2d1f9884cefef2631",
+
     measurementId:
       "G-ME77G36Z4S"
+
   };
 
 
-  // ============================================================
-  // VAPID KEY
-  // KEEP YOUR EXISTING VAPID KEY
-  // ============================================================
+  /*
+   * ==========================================
+   * FIREBASE VAPID PUBLIC KEY
+   * ==========================================
+   */
 
   const VAPID_KEY =
-    "YOUR_EXISTING_VAPID_KEY";
+    "BG9DxwA_SjkCNwr2qA46gMq6QfeaFuKp3aX9PSindEqEAG-KbzqsKvmqWx3sBm8mlWoyHZs-Z5b1NU5uU49_dnQ";
 
 
-  // ============================================================
-  // APPS SCRIPT REGISTRY URL
-  // ============================================================
+  /*
+   * ==========================================
+   * GOOGLE APPS SCRIPT REGISTRY
+   * ==========================================
+   */
 
   const REGISTRY_URL =
-    "https://script.google.com/a/macros/weblioph.com/s/AKfycbxxoYtfn61r8Ce_YXEn8uS9GILWcci6E3Cuqc2Y2t8tIM7G-5tAUZapaIzdSavvq43s/exec";
+    "https://script.google.com/macros/s/AKfycbzdgH_gwN_j6h2-xUIB5oECq1wCctEHLRm5HKxW55cHkFaNhTHXSppkj0lcZCVzt3S5/exec";
 
 
-  // ============================================================
-  // ELEMENTS
-  // ============================================================
+  /*
+   * ==========================================
+   * PAGE ELEMENTS
+   * ==========================================
+   */
 
   const form =
-    document.getElementById("notificationForm");
+    document.getElementById(
+      "notificationForm"
+    );
 
   const button =
-    document.getElementById("enableButton");
+    document.getElementById(
+      "enableButton"
+    );
 
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
 
 
-  // ============================================================
-  // STATUS MESSAGE
-  // ============================================================
+  /*
+   * ==========================================
+   * STATUS MESSAGE
+   * ==========================================
+   */
 
-  function showStatus(message, type) {
+  function showStatus(
+    message,
+    type
+  ) {
 
-    status.textContent = message;
+    status.textContent =
+      message;
 
     status.className =
       "status " + type;
 
     status.style.display =
       "block";
+
   }
 
 
-  // ============================================================
-  // REGISTER SERVICE WORKER
-  // ============================================================
+  /*
+   * ==========================================
+   * SERVICE WORKER
+   * ==========================================
+   */
 
   async function registerServiceWorker() {
 
-    if (!("serviceWorker" in navigator)) {
+    if (
+      !("serviceWorker" in navigator)
+    ) {
 
       throw new Error(
         "This browser does not support service workers."
       );
 
     }
+
+
+    /*
+     * IMPORTANT:
+     *
+     * Vercel serves the service worker
+     * from the root of the website.
+     */
 
     const serviceWorkerUrl =
       "/firebase-messaging-sw.js";
@@ -280,12 +330,15 @@
 
 
     return registration;
+
   }
 
 
-  // ============================================================
-  // FORM SUBMISSION
-  // ============================================================
+  /*
+   * ==========================================
+   * FORM SUBMISSION
+   * ==========================================
+   */
 
   form.addEventListener(
     "submit",
@@ -308,7 +361,14 @@
           .trim();
 
 
-      if (!tutorId || !email) {
+      /*
+       * Validate fields
+       */
+
+      if (
+        !tutorId ||
+        !email
+      ) {
 
         showStatus(
           "Please enter your Tutor ID and email address.",
@@ -316,10 +376,16 @@
         );
 
         return;
+
       }
 
 
-      button.disabled = true;
+      /*
+       * Disable button while processing
+       */
+
+      button.disabled =
+        true;
 
       button.textContent =
         "Enabling Notifications...";
@@ -327,11 +393,16 @@
 
       try {
 
-        // ------------------------------------------------------
-        // CHECK NOTIFICATION SUPPORT
-        // ------------------------------------------------------
+        /*
+         * ======================================
+         * STEP 1
+         * Check notification support
+         * ======================================
+         */
 
-        if (!("Notification" in window)) {
+        if (
+          !("Notification" in window)
+        ) {
 
           throw new Error(
             "This browser does not support web notifications."
@@ -340,23 +411,22 @@
         }
 
 
-        // ------------------------------------------------------
-        // REGISTER SERVICE WORKER
-        // ------------------------------------------------------
-
         showStatus(
           "Preparing notification service...",
           "info"
         );
 
 
+        /*
+         * ======================================
+         * STEP 2
+         * Register service worker
+         * ======================================
+         */
+
         const registration =
           await registerServiceWorker();
 
-
-        // ------------------------------------------------------
-        // REQUEST PERMISSION
-        // ------------------------------------------------------
 
         showStatus(
           "Requesting notification permission...",
@@ -364,11 +434,20 @@
         );
 
 
+        /*
+         * ======================================
+         * STEP 3
+         * Request permission
+         * ======================================
+         */
+
         const permission =
           await Notification.requestPermission();
 
 
-        if (permission !== "granted") {
+        if (
+          permission !== "granted"
+        ) {
 
           throw new Error(
             "Notification permission was not granted."
@@ -377,33 +456,43 @@
         }
 
 
-        // ------------------------------------------------------
-        // INITIALIZE FIREBASE
-        // ------------------------------------------------------
-
         showStatus(
           "Permission granted. Connecting to Firebase...",
           "info"
         );
 
 
+        /*
+         * ======================================
+         * STEP 4
+         * Initialize Firebase
+         * ======================================
+         */
+
         const app =
-          initializeApp(firebaseConfig);
+          initializeApp(
+            firebaseConfig
+          );
 
 
         const messaging =
-          getMessaging(app);
+          getMessaging(
+            app
+          );
 
-
-        // ------------------------------------------------------
-        // CREATE FCM TOKEN
-        // ------------------------------------------------------
 
         showStatus(
           "Creating notification registration...",
           "info"
         );
 
+
+        /*
+         * ======================================
+         * STEP 5
+         * Generate FCM token
+         * ======================================
+         */
 
         const token =
           await getToken(
@@ -433,15 +522,18 @@
         );
 
 
-        // ------------------------------------------------------
-        // SAVE REGISTRATION TO APPS SCRIPT
-        // ------------------------------------------------------
-
         showStatus(
           "Notification registration created. Saving...",
           "info"
         );
 
+
+        /*
+         * ======================================
+         * STEP 6
+         * Save registration to Apps Script
+         * ======================================
+         */
 
         await fetch(
           REGISTRY_URL,
@@ -451,7 +543,8 @@
             mode: "no-cors",
 
             headers: {
-              "Content-Type": "text/plain"
+              "Content-Type":
+                "text/plain"
             },
 
             body:
@@ -470,13 +563,16 @@
                   permission
 
               })
+
           }
         );
 
 
-        // ------------------------------------------------------
-        // SUCCESS
-        // ------------------------------------------------------
+        /*
+         * ======================================
+         * SUCCESS
+         * ======================================
+         */
 
         showStatus(
           "✅ Notifications have been enabled successfully!",
@@ -490,6 +586,12 @@
 
       } catch (error) {
 
+        /*
+         * ======================================
+         * ERROR HANDLING
+         * ======================================
+         */
+
         console.error(
           "Notification registration error:",
           error
@@ -497,14 +599,14 @@
 
 
         showStatus(
-          "❌ " + error.message,
+          "❌ " +
+          error.message,
           "error"
         );
 
 
         button.disabled =
           false;
-
 
         button.textContent =
           "Enable Notifications";
