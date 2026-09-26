@@ -1,44 +1,100 @@
-importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"
+);
+
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js"
+);
+
 
 firebase.initializeApp({
-  apiKey: "AIzaSyDHa8Asn_C2YbNEpLdzQur5abUA_L5cI74",
-  authDomain: "weblio-push-hub-64689.firebaseapp.com",
-  projectId: "weblio-push-hub-64689",
-  storageBucket: "weblio-push-hub-64689.firebasestorage.app",
-  messagingSenderId: "240629203108",
-  appId: "1:240629203108:web:38e2e2d1f9884cefef2631",
-  measurementId: "G-ME77G36Z4S"
+
+  apiKey:
+    "AIzaSyDHaAsn_C2YbNEpLdzQur5abUA_L5cI74",
+
+  authDomain:
+    "weblio-push-hub-64689.firebaseapp.com",
+
+  projectId:
+    "weblio-push-hub-64689",
+
+  storageBucket:
+    "weblio-push-hub-64689.firebasestorage.app",
+
+  messagingSenderId:
+    "240629203108",
+
+  appId:
+    "1:240629203108:web:38e2e2d1f9884cefef2631",
+
+  measurementId:
+    "G-ME77G36Z4S"
+
 });
 
-const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function(payload) {
-  console.log("Background message received:", payload);
+const messaging =
+  firebase.messaging();
 
-  const notificationTitle =
-    payload.notification?.title || "Weblio Philippines";
 
-  const notificationOptions = {
-    body: payload.notification?.body || "You have a new Weblio notification.",
-    icon: "/weblio-push-service-worker/icon.png"
-  };
+messaging.onBackgroundMessage(
+  function(payload) {
 
-  self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  );
-});
+    console.log(
+      "Background message received:",
+      payload
+    );
 
-self.addEventListener("install", function() {
-  console.log("Weblio notification service worker installed.");
-  self.skipWaiting();
-});
 
-self.addEventListener("activate", function(event) {
-  console.log("Weblio notification service worker activated.");
+    const notificationTitle =
+      payload.notification?.title ||
+      "Weblio Philippines";
 
-  event.waitUntil(
-    self.clients.claim()
-  );
-});
+
+    const notificationOptions = {
+
+      body:
+        payload.notification?.body ||
+        "You have a new Weblio notification."
+
+    };
+
+
+    self.registration.showNotification(
+      notificationTitle,
+      notificationOptions
+    );
+
+  }
+);
+
+
+self.addEventListener(
+  "install",
+  function() {
+
+    console.log(
+      "Weblio notification service worker installed."
+    );
+
+    self.skipWaiting();
+
+  }
+);
+
+
+self.addEventListener(
+  "activate",
+  function(event) {
+
+    console.log(
+      "Weblio notification service worker activated."
+    );
+
+
+    event.waitUntil(
+      self.clients.claim()
+    );
+
+  }
+);
