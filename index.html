@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Weblio Firebase Test</title>
 
   <style>
@@ -10,6 +11,7 @@
       font-family: Arial, sans-serif;
       background: #f5f7fb;
       padding: 30px 15px;
+      margin: 0;
     }
 
     .container {
@@ -23,6 +25,11 @@
 
     h1 {
       margin-top: 0;
+    }
+
+    p {
+      line-height: 1.5;
+      color: #555;
     }
 
     button {
@@ -39,6 +46,7 @@
 
     button:disabled {
       background: #999;
+      cursor: not-allowed;
     }
 
     #status {
@@ -48,6 +56,7 @@
       background: #f3f4f6;
       white-space: pre-wrap;
       word-break: break-word;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -60,7 +69,7 @@
 
   <p>
     This is a temporary diagnostic page.
-    It only tests Firebase Cloud Messaging from Vercel.
+    It tests Firebase Cloud Messaging from the Vercel deployment.
   </p>
 
   <button id="testButton">
@@ -93,7 +102,7 @@
   const firebaseConfig = {
 
     apiKey:
-      "AIzaSyDHaAsn_C2YbNEpLdzQur5abUA_L5cI74",
+      "AIzaSyD5XhPV7yGhrCPUiYj3TSWuHF8OVWVAcXk",
 
     authDomain:
       "weblio-push-hub-64689.firebaseapp.com",
@@ -117,7 +126,7 @@
 
 
   /*
-   * VAPID KEY
+   * VAPID PUBLIC KEY
    */
 
   const VAPID_KEY =
@@ -162,7 +171,7 @@
 
 
         console.log(
-          "Firebase app:",
+          "Firebase app initialized:",
           app
         );
 
@@ -226,6 +235,11 @@
         await navigator.serviceWorker.ready;
 
 
+        console.log(
+          "Service worker is ready."
+        );
+
+
         showStatus(
           "STEP 1 PASSED\n\n" +
           "STEP 2 PASSED\n\n" +
@@ -243,11 +257,18 @@
           await Notification.requestPermission();
 
 
+        console.log(
+          "Notification permission:",
+          permission
+        );
+
+
         if (permission !== "granted") {
 
           throw new Error(
             "Notification permission was not granted. " +
-            "Current permission: " + permission
+            "Current permission: " +
+            permission
           );
 
         }
@@ -269,6 +290,12 @@
 
         const messaging =
           getMessaging(app);
+
+
+        console.log(
+          "Firebase Messaging initialized:",
+          messaging
+        );
 
 
         showStatus(
@@ -316,7 +343,7 @@
           "🎉 SUCCESS\n\n" +
           "Firebase successfully created an FCM token.\n\n" +
           "The Vercel → Firebase connection is working.\n\n" +
-          "FCM Token:\n" +
+          "FCM Token:\n\n" +
           token
         );
 
