@@ -3,20 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Weblio Tutor Notifications</title>
+  <title>Weblio Firebase Test</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f5f7fb;
-      margin: 0;
       padding: 30px 15px;
-      color: #333;
     }
 
     .container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 40px auto;
       background: white;
       padding: 30px;
@@ -26,72 +23,31 @@
 
     h1 {
       margin-top: 0;
-      font-size: 25px;
-      text-align: center;
-    }
-
-    .description {
-      text-align: center;
-      color: #666;
-      line-height: 1.5;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      font-size: 15px;
     }
 
     button {
       width: 100%;
-      margin-top: 25px;
-      padding: 13px;
+      padding: 14px;
+      margin-top: 20px;
       border: none;
       border-radius: 7px;
       background: #2563eb;
       color: white;
       font-size: 16px;
-      font-weight: bold;
       cursor: pointer;
     }
 
     button:disabled {
       background: #999;
-      cursor: not-allowed;
     }
 
-    .status {
+    #status {
       margin-top: 20px;
-      padding: 12px;
+      padding: 15px;
       border-radius: 7px;
-      display: none;
-      line-height: 1.4;
-    }
-
-    .success {
-      background: #ecfdf5;
-      color: #065f46;
-    }
-
-    .error {
-      background: #fef2f2;
-      color: #991b1b;
-    }
-
-    .info {
-      background: #eff6ff;
-      color: #1e40af;
+      background: #f3f4f6;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
   </style>
 </head>
@@ -100,39 +56,20 @@
 
 <div class="container">
 
-  <h1>🔔 Weblio Tutor Notifications</h1>
+  <h1>Weblio Firebase Test</h1>
 
-  <p class="description">
-    Enable browser notifications to receive important Weblio updates.
+  <p>
+    This is a temporary diagnostic page.
+    It only tests Firebase Cloud Messaging from Vercel.
   </p>
 
-  <form id="notificationForm">
+  <button id="testButton">
+    Test Firebase
+  </button>
 
-    <label for="tutorId">Tutor ID</label>
-
-    <input
-      type="text"
-      id="tutorId"
-      placeholder="Enter your Tutor ID"
-      required
-    >
-
-    <label for="email">Email Address</label>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="Enter your email address"
-      required
-    >
-
-    <button type="submit" id="enableButton">
-      Enable Notifications
-    </button>
-
-  </form>
-
-  <div id="status" class="status"></div>
+  <div id="status">
+    Ready.
+  </div>
 
 </div>
 
@@ -150,184 +87,157 @@
 
 
   /*
-   * FIREBASE CONFIGURATION
+   * FIREBASE CONFIG
    */
 
   const firebaseConfig = {
-    apiKey: "AIzaSyDHaAsn_C2YbNEpLdzQur5abUA_L5cI74",
-    authDomain: "weblio-push-hub-64689.firebaseapp.com",
-    projectId: "weblio-push-hub-64689",
-    storageBucket: "weblio-push-hub-64689.firebasestorage.app",
-    messagingSenderId: "240629203108",
-    appId: "1:240629203108:web:38e2e2d1f9884cefef2631",
-    measurementId: "G-ME77G36Z4S"
+
+    apiKey:
+      "AIzaSyDHaAsn_C2YbNEpLdzQur5abUA_L5cI74",
+
+    authDomain:
+      "weblio-push-hub-64689.firebaseapp.com",
+
+    projectId:
+      "weblio-push-hub-64689",
+
+    storageBucket:
+      "weblio-push-hub-64689.firebasestorage.app",
+
+    messagingSenderId:
+      "240629203108",
+
+    appId:
+      "1:240629203108:web:38e2e2d1f9884cefef2631",
+
+    measurementId:
+      "G-ME77G36Z4S"
+
   };
 
 
   /*
-   * FIREBASE WEB PUSH VAPID KEY
+   * VAPID KEY
    */
 
   const VAPID_KEY =
     "BG9DxwA_SjkCNwr2qA46gMq6QfeaFuKp3aX9PSindEqEAG-KbzqsKvmqWx3sBm8mlWoyHZs-Z5b1NU5uU49_dnQ";
 
 
-  /*
-   * GOOGLE APPS SCRIPT REGISTRY
-   */
-
-  const REGISTRY_URL =
-    "https://script.google.com/macros/s/AKfycbzdgH_gwN_j6h2-xUIB5oECq1wCctEHLRm5HKxW55cHkFaNhTHXSppkj0lcZCVzt3S5/exec";
-
-
-  const form =
-    document.getElementById("notificationForm");
-
   const button =
-    document.getElementById("enableButton");
+    document.getElementById("testButton");
 
   const status =
     document.getElementById("status");
 
 
-  function showStatus(message, type) {
+  function showStatus(message) {
 
     status.textContent = message;
 
-    status.className =
-      "status " + type;
-
-    status.style.display =
-      "block";
+    console.log(message);
 
   }
 
 
-  /*
-   * REGISTER FIREBASE SERVICE WORKER
-   *
-   * IMPORTANT:
-   * The service worker is located at the
-   * ROOT of the Vercel website.
-   */
-
-  async function registerServiceWorker() {
-
-    if (!("serviceWorker" in navigator)) {
-
-      throw new Error(
-        "This browser does not support service workers."
-      );
-
-    }
-
-
-    const serviceWorkerUrl =
-      "/firebase-messaging-sw.js";
-
-
-    const registration =
-      await navigator.serviceWorker.register(
-        serviceWorkerUrl,
-        {
-          scope: "/"
-        }
-      );
-
-
-    console.log(
-      "Service worker registered:",
-      registration
-    );
-
-
-    await navigator.serviceWorker.ready;
-
-
-    console.log(
-      "Service worker is ready:",
-      navigator.serviceWorker.controller
-    );
-
-
-    return registration;
-
-  }
-
-
-  /*
-   * ENABLE NOTIFICATIONS
-   */
-
-  form.addEventListener(
-    "submit",
-    async function(event) {
-
-      event.preventDefault();
-
-
-      const tutorId =
-        document
-          .getElementById("tutorId")
-          .value
-          .trim();
-
-
-      const email =
-        document
-          .getElementById("email")
-          .value
-          .trim();
-
-
-      if (!tutorId || !email) {
-
-        showStatus(
-          "Please enter your Tutor ID and email address.",
-          "error"
-        );
-
-        return;
-
-      }
-
+  button.addEventListener(
+    "click",
+    async function() {
 
       button.disabled = true;
 
-      button.textContent =
-        "Enabling Notifications...";
+      showStatus(
+        "STEP 1: Initializing Firebase..."
+      );
 
 
       try {
 
+        /*
+         * STEP 1
+         */
+
+        const app =
+          initializeApp(firebaseConfig);
+
+
+        console.log(
+          "Firebase app:",
+          app
+        );
+
+
+        showStatus(
+          "STEP 1 PASSED\n\n" +
+          "Firebase initialized successfully.\n\n" +
+          "STEP 2: Checking browser support..."
+        );
+
+
+        /*
+         * STEP 2
+         */
+
         if (!("Notification" in window)) {
 
           throw new Error(
-            "This browser does not support web notifications."
+            "This browser does not support notifications."
+          );
+
+        }
+
+
+        if (!("serviceWorker" in navigator)) {
+
+          throw new Error(
+            "This browser does not support service workers."
           );
 
         }
 
 
         showStatus(
-          "Preparing notification service...",
-          "info"
+          "STEP 1 PASSED\n\n" +
+          "STEP 2 PASSED\n\n" +
+          "Browser supports notifications and service workers.\n\n" +
+          "STEP 3: Registering service worker..."
         );
 
 
         /*
-         * Register service worker FIRST.
+         * STEP 3
          */
 
         const registration =
-          await registerServiceWorker();
+          await navigator.serviceWorker.register(
+            "/firebase-messaging-sw.js",
+            {
+              scope: "/"
+            }
+          );
+
+
+        console.log(
+          "Service worker registration:",
+          registration
+        );
+
+
+        await navigator.serviceWorker.ready;
 
 
         showStatus(
-          "Requesting notification permission...",
-          "info"
+          "STEP 1 PASSED\n\n" +
+          "STEP 2 PASSED\n\n" +
+          "STEP 3 PASSED\n\n" +
+          "Service worker registered successfully.\n\n" +
+          "STEP 4: Requesting notification permission..."
         );
 
+
+        /*
+         * STEP 4
+         */
 
         const permission =
           await Notification.requestPermission();
@@ -336,32 +246,44 @@
         if (permission !== "granted") {
 
           throw new Error(
-            "Notification permission was not granted."
+            "Notification permission was not granted. " +
+            "Current permission: " + permission
           );
 
         }
 
 
         showStatus(
-          "Permission granted. Creating notification registration...",
-          "info"
+          "STEP 1 PASSED\n\n" +
+          "STEP 2 PASSED\n\n" +
+          "STEP 3 PASSED\n\n" +
+          "STEP 4 PASSED\n\n" +
+          "Notification permission granted.\n\n" +
+          "STEP 5: Initializing Firebase Messaging..."
         );
 
 
         /*
-         * Initialize Firebase.
+         * STEP 5
          */
-
-        const app =
-          initializeApp(firebaseConfig);
-
 
         const messaging =
           getMessaging(app);
 
 
+        showStatus(
+          "STEP 1 PASSED\n\n" +
+          "STEP 2 PASSED\n\n" +
+          "STEP 3 PASSED\n\n" +
+          "STEP 4 PASSED\n\n" +
+          "STEP 5 PASSED\n\n" +
+          "Firebase Messaging initialized.\n\n" +
+          "STEP 6: Requesting FCM token..."
+        );
+
+
         /*
-         * Generate FCM token.
+         * STEP 6
          */
 
         const token =
@@ -378,83 +300,51 @@
         if (!token) {
 
           throw new Error(
-            "Firebase did not return a notification token."
+            "Firebase returned an empty FCM token."
           );
 
         }
 
 
         console.log(
-          "FCM token created:",
+          "FCM TOKEN:",
           token
         );
 
 
         showStatus(
-          "Notification registration created. Saving...",
-          "info"
-        );
-
-
-        /*
-         * SAVE TOKEN TO GOOGLE SHEET
-         */
-
-        await fetch(
-          REGISTRY_URL,
-          {
-            method: "POST",
-
-            mode: "no-cors",
-
-            headers: {
-              "Content-Type": "text/plain"
-            },
-
-            body: JSON.stringify({
-
-              tutorId: tutorId,
-
-              email: email,
-
-              token: token,
-
-              permission: permission
-
-            })
-
-          }
-        );
-
-
-        showStatus(
-          "✅ Notifications have been enabled successfully!",
-          "success"
+          "🎉 SUCCESS\n\n" +
+          "Firebase successfully created an FCM token.\n\n" +
+          "The Vercel → Firebase connection is working.\n\n" +
+          "FCM Token:\n" +
+          token
         );
 
 
         button.textContent =
-          "Notifications Enabled";
+          "Firebase Test Passed";
 
 
       } catch (error) {
 
         console.error(
-          "Notification registration error:",
+          "FIREBASE TEST ERROR:",
           error
         );
 
 
         showStatus(
-          "❌ " + error.message,
-          "error"
+          "❌ TEST FAILED\n\n" +
+          error.toString() +
+          "\n\n" +
+          "Check the browser Console (F12) for details."
         );
 
 
         button.disabled = false;
 
         button.textContent =
-          "Enable Notifications";
+          "Test Firebase Again";
 
       }
 
