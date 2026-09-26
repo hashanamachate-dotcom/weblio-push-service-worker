@@ -149,6 +149,10 @@
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging.js";
 
 
+  /*
+   * FIREBASE CONFIGURATION
+   */
+
   const firebaseConfig = {
     apiKey: "AIzaSyDHaAsn_C2YbNEpLdzQur5abUA_L5cI74",
     authDomain: "weblio-push-hub-64689.firebaseapp.com",
@@ -160,9 +164,17 @@
   };
 
 
+  /*
+   * FIREBASE WEB PUSH VAPID KEY
+   */
+
   const VAPID_KEY =
     "BG9DxwA_SjkCNwr2qA46gMq6QfeaFuKp3aX9PSindEqEAG-KbzqsKvmqWx3sBm8mlWoyHZs-Z5b1NU5uU49_dnQ";
 
+
+  /*
+   * GOOGLE APPS SCRIPT REGISTRY
+   */
 
   const REGISTRY_URL =
     "https://script.google.com/macros/s/AKfycbzdgH_gwN_j6h2-xUIB5oECq1wCctEHLRm5HKxW55cHkFaNhTHXSppkj0lcZCVzt3S5/exec";
@@ -192,8 +204,11 @@
 
 
   /*
-   * Register the Firebase service worker
-   * from the ROOT of the Vercel website.
+   * REGISTER FIREBASE SERVICE WORKER
+   *
+   * IMPORTANT:
+   * The service worker is located at the
+   * ROOT of the Vercel website.
    */
 
   async function registerServiceWorker() {
@@ -239,6 +254,10 @@
 
   }
 
+
+  /*
+   * ENABLE NOTIFICATIONS
+   */
 
   form.addEventListener(
     "submit",
@@ -296,6 +315,10 @@
         );
 
 
+        /*
+         * Register service worker FIRST.
+         */
+
         const registration =
           await registerServiceWorker();
 
@@ -325,6 +348,10 @@
         );
 
 
+        /*
+         * Initialize Firebase.
+         */
+
         const app =
           initializeApp(firebaseConfig);
 
@@ -332,6 +359,10 @@
         const messaging =
           getMessaging(app);
 
+
+        /*
+         * Generate FCM token.
+         */
 
         const token =
           await getToken(
@@ -365,14 +396,21 @@
         );
 
 
+        /*
+         * SAVE TOKEN TO GOOGLE SHEET
+         */
+
         await fetch(
           REGISTRY_URL,
           {
             method: "POST",
+
             mode: "no-cors",
+
             headers: {
               "Content-Type": "text/plain"
             },
+
             body: JSON.stringify({
 
               tutorId: tutorId,
@@ -384,6 +422,7 @@
               permission: permission
 
             })
+
           }
         );
 
