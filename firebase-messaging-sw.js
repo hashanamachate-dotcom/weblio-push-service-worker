@@ -63,11 +63,16 @@ messaging.onBackgroundMessage(
     self.registration.showNotification(
       notificationTitle,
       notificationOptions
+
     );
 
   }
 );
 
+
+/*
+ * SERVICE WORKER INSTALLATION
+ */
 
 self.addEventListener(
   "install",
@@ -82,6 +87,10 @@ self.addEventListener(
   }
 );
 
+
+/*
+ * SERVICE WORKER ACTIVATION
+ */
 
 self.addEventListener(
   "activate",
