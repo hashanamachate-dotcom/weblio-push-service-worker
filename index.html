@@ -39,23 +39,35 @@
       min-height: 100vh;
     }
 
+    /* 2-COLUMN SPLIT CONTAINER */
     .container {
       width: 100%;
-      max-width: 480px;
+      max-width: 900px;
       background: var(--card-bg);
-      padding: 36px 30px;
-      border-radius: 16px;
+      border-radius: 20px;
       border: 1px solid var(--border-color);
-      border-top: 5px solid var(--weblio-brown);
-      box-shadow: 0 10px 25px rgba(88, 47, 14, 0.05);
+      box-shadow: 0 15px 35px rgba(88, 47, 14, 0.08);
+      display: flex;
+      overflow: hidden;
     }
 
-    .brand-header {
+    /* LEFT SIDE: HERO PHOTO & OVERLAY */
+    .hero-panel {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(88, 47, 14, 0.85), rgba(217, 119, 6, 0.9)),
+                  url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+      padding: 40px 32px;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .brand-header-panel {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 10px;
-      margin-bottom: 20px;
     }
 
     .brand-icon {
@@ -75,39 +87,36 @@
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.8px;
-      color: var(--weblio-brown);
+      color: #FFFDF9;
       text-transform: uppercase;
     }
 
-    h1 {
-      margin: 0 0 8px 0;
-      font-size: 22px;
+    .hero-body h2 {
+      font-size: 26px;
       font-weight: 800;
-      text-align: center;
-      color: var(--text-dark);
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
 
-    .description {
-      text-align: center;
-      color: var(--text-muted);
+    .hero-body p {
       font-size: 14px;
-      line-height: 1.5;
-      margin: 0 0 24px 0;
+      line-height: 1.6;
+      color: #FEF3C7;
+      margin-bottom: 24px;
     }
 
-    /* VALUE ADD PROMO BOX */
     .benefits-box {
-      background-color: #FFFDF9;
-      border: 1px dashed #FCD34D;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 24px;
+      background-color: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      padding: 16px 18px;
     }
 
     .benefits-title {
       font-size: 12px;
-      font-weight: 700;
-      color: var(--weblio-orange);
+      font-weight: 800;
+      color: #FDE68A;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -116,9 +125,39 @@
     .benefits-list {
       margin: 0;
       padding-left: 18px;
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 13px;
+      color: #FFFFFF;
       line-height: 1.6;
+    }
+
+    .hero-footer {
+      font-size: 12px;
+      color: #FDE68A;
+      margin-top: 30px;
+    }
+
+    /* RIGHT SIDE: FORM PANEL */
+    .form-panel {
+      flex: 1.1;
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--card-bg);
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .description {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 24px 0;
     }
 
     label {
@@ -204,6 +243,22 @@
       color: var(--info-text);
       border: 1px solid #FDE68A;
     }
+
+    /* RESPONSIVE DESIGNS FOR MOBILE */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        border-radius: 16px;
+      }
+
+      .hero-panel {
+        padding: 30px 24px;
+      }
+
+      .form-panel {
+        padding: 30px 24px;
+      }
+    }
   </style>
 </head>
 
@@ -211,65 +266,77 @@
 
 <div class="container">
 
-  <!-- BRAND HEADER -->
-  <div class="brand-header">
-    <div class="brand-icon">w</div>
-    <span class="brand-title">Weblio Philippines</span>
+  <!-- LEFT COLUMN: PHOTO & BRAND PANEL -->
+  <div class="hero-panel">
+    <div class="brand-header-panel">
+      <div class="brand-icon">w</div>
+      <span class="brand-title">Weblio Philippines</span>
+    </div>
+
+    <div class="hero-body">
+      <h2>Never Miss Priority Opportunities</h2>
+      <p>Stay informed with instant desktop and mobile browser alerts reserved for high-priority news and updates.</p>
+
+      <div class="benefits-box">
+        <div class="benefits-title">⚡ Subscription Perks</div>
+        <ul class="benefits-list">
+          <li><strong>Priority Slot Alerts:</strong> High-demand lesson openings.</li>
+          <li><strong>Incentives & Raffles:</strong> Direct promo announcements.</li>
+          <li><strong>Urgent News:</strong> Important platform updates.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hero-footer">
+      Tutor Engagement Department &bull; Weblio Philippines
+    </div>
   </div>
 
-  <h1>🔔 Instant Push Alerts</h1>
+  <!-- RIGHT COLUMN: REGISTRATION FORM -->
+  <div class="form-panel">
+    <h1>🔔 Instant Push Alerts</h1>
+    <p class="description">
+      Register your Tutor ID and email address to subscribe your browser.
+    </p>
 
-  <p class="description">
-    Enable desktop and mobile browser alerts to stay ahead of urgent opportunities and updates.
-  </p>
+    <form id="notificationForm">
 
-  <!-- HIGHLIGHT BENEFITS -->
-  <div class="benefits-box">
-    <div class="benefits-title">⚡ Why Subscribe?</div>
-    <ul class="benefits-list">
-      <li><strong>Priority Slot Openings:</strong> Get instant alerts for high-demand lesson slots.</li>
-      <li><strong>Incentives & Raffles:</strong> Direct notifications for active promos & cash tokens.</li>
-      <li><strong>Key Updates:</strong> Urgent announcements delivered straight to your screen.</li>
-    </ul>
+      <label for="tutorId">
+        Tutor ID (TUID)
+      </label>
+
+      <input
+        type="text"
+        id="tutorId"
+        placeholder="e.g. 23456"
+        required
+      >
+
+      <label for="email">
+        Weblio Email Address
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="e.g. tutor@weblioph.com"
+        required
+      >
+
+      <button
+        type="submit"
+        id="enableButton"
+      >
+        Enable Push Alerts
+      </button>
+
+    </form>
+
+    <div
+      id="status"
+      class="status"
+    ></div>
   </div>
-
-  <form id="notificationForm">
-
-    <label for="tutorId">
-      Tutor ID (TUID)
-    </label>
-
-    <input
-      type="text"
-      id="tutorId"
-      placeholder="e.g. 23456"
-      required
-    >
-
-    <label for="email">
-      Weblio Email Address
-    </label>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="e.g. tutor@weblioph.com"
-      required
-    >
-
-    <button
-      type="submit"
-      id="enableButton"
-    >
-      Enable Push Alerts
-    </button>
-
-  </form>
-
-  <div
-    id="status"
-    class="status"
-  ></div>
 
 </div>
 
